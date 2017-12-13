@@ -1,0 +1,179 @@
+初级课程
+
+1.程序获取
+http://nginx.org/en/download.html
+
+2.安装
+下载
+wget http://nginx.org/download/nginx-1.6.3.tar.gz
+cd nginx-1.6.3
+
+编译选项
+http://nginx.org/en/docs/configure.html
+
+简易安装
+
+生产安装
+cd nginx-1.6.3
+./configure --prefix=/usr/local/nginx --conf-path=/etc/nginx/nginx.conf
+yum install gcc
+yum install pcre-devel
+yum install zlib-devel
+make 编译
+make install 安装
+
+4.目录结构
+sbin
+logs
+html
+
+5.常用命令（先配置环境变量）
+vi /etc/profile 全局修改
+vi /root/.bash_profile root修改
+PATH=/usr/local/nginx/sbin:$PATH:$HOME/bin:
+source /root/.bash_profile
+
+测试启动配置 nginx -t -c /etc/nginx/nginx.conf （-t用于测试配置文件）
+启动nginx nginx -c /etc/nginx/nginx.conf (-c用于指定配置文件，不指定使用默认位置)
+强制停止nginx nginx -s stop
+平滑停止nginx nginx -s quit
+重新加载nginx nginx -s reload
+重新加载日志 nginx -s reopen
+查看nginx版本nginx -v
+查看nginx编译配置参数 nginx -V
+查看nginx启动情况 ps -ef | grep nginx
+
+
+配置服务和开机启动
+vi /etc/init.d/nginx
+chmod +x /etc/init.d/nginx
+chkconfig nginx on
+service nginx start
+
+6.网站访问（域名访问配置）
+C:\Windows\System32\drivers\etc\hosts
+
+通用浏览器解析顺序 www.liutao.com
+hosts文件---本地DNS---内网DNS---外网DNS（先找liutao.com 再找 .com 再找 .）
+
+7.nginx.conf参数讲解（先简单介绍，后面优化讲解深入说）
+
+全局设置 main{}
+事件设置 event{}
+服务器设置 http{}
+主机设置 server{}
+URL设置 location
+
+8.常用功能讲解
+404公益（当用户访问的页面不存在时，跳转到一个指定的页面）
+301 302跳转（网站更换域名的临时性或永久性跳转）
+防盗链 （防止其他网站盗图，盗链接）
+伪静态（提高搜索引擎收录量）
+gzip压缩 （节省网络带宽流量）
+下载模块（下载类网站使用）
+
+中级课程
+
+9.代理功能讲解
+正向代理（翻墙和用户行为审计）
+反向代理（实现网站负载均衡，提高网站性能）
+
+配置PHP服务
+yum install php
+yum install php-fpm
+yum install php-mysql
+
+listen = 192.168.100.191:9000
+#listen.allowed_clients = 127.0.0.1
+
+安装京东网站
+yum install unzip
+unzip ecshop_v2.7.3.zip 
+mkdir -p /usr/local/nginx/html
+mv  ecshop_v2.7.3 /usr/local/nginx/html
+
+
+yum install openssh-clients
+
+
+配置JAVA服务
+安装jdk
+vi /root/.bash_profile 
+
+export JAVA_HOME=/usr/java/latest
+export PATH=$JAVA_HOME/bin:$PATH:$HOME/bin
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+
+source /root/.bash_profile
+
+java -version
+
+安装tomcat
+wget http://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-8/v8.5.4/bin/apache-tomcat-8.5.4.tar.gz
+tar -zxvf apache-tomcat-8.5.4.tar.gz 
+mv apache-tomcat-8.5.4 /usr/local/
+
+启动tomcat
+/usr/local/apache-tomcat-8.5.4/bin/startup.sh
+
+关闭tomcat
+/usr/local/apache-tomcat-8.5.4/bin/stop.sh
+
+日志位置
+error.log /usr/local/apache-tomcat-8.5.4/logs/catalina.out tomcat启动日志，用于查看启动tomcat过程中的错误和信息的
+access.log /usr/local/apache-tomcat-8.5.4/logs/localhost_access_log.2016-07-23.txt tomcat访问日志，用于查看用户的访问信息
+
+配置文件的位置(改端口，做集群，调日志）
+/usr/local/apache-tomcat-8.5.4/conf/server.xml
+
+jvm配置文件
+/usr/local/apache-tomcat-8.5.4/bin/catalina.sh
+
+部署目录
+/usr/local/apache-tomcat-8.5.4/webapps
+
+怎么通过日志看一个动态页面的请求是否转发？
+
+目录结构
+drwxr-x---. 2 root root  4096 Jul 23 06:49 bin  命令
+drwx------. 3 root root  4096 Jul 23 06:51 conf
+drwxr-x---. 2 root root  4096 Jul 23 06:49 lib
+-rw-r-----. 1 root root 57092 Jul  6 04:45 LICENSE
+drwxr-x---. 2 root root  4096 Jul 23 06:51 logs
+-rw-r-----. 1 root root  1723 Jul  6 04:45 NOTICE
+-rw-r-----. 1 root root  7063 Jul  6 04:45 RELEASE-NOTES
+-rw-r-----. 1 root root 15946 Jul  6 04:45 RUNNING.txt
+drwxr-x---. 2 root root  4096 Jul 23 06:49 temp
+drwxr-x---. 7 root root  4096 Jul  6 04:44 webapps
+drwxr-x---. 3 root root  4096 Jul 23 06:51 work
+
+
+10.负载功能讲解
+fastcgi（php电商网站模拟）
+
+模块安装（403模块）
+
+proxy（java网站模拟）
+
+多域名虚拟主机（节省机器的最佳方案，多个虚拟站点使用不同域名，但公用一个IP）
+多端口虚拟主机（多个应用同时使用nginx）
+
+负载均衡（upstream，演示nginx负载php项目，nginx负载java项目）
+
+高级课程
+
+12.nginx tuning 与troubleshooting（调优和故障排查）
+网站各种常见故障处理（403 404 500 503 504）
+启动故障处理
+全局设置优化main{}
+事件设置优化 event{}
+服务器设置优化 http{}
+主机设置优化 server{}
+URL设置优化 location
+fastcgi负载优化
+proxy负载优化
+
+13.网站集群架构
+大规模集群lvs+keepalived+nginx构建千万级并发网站（8节点集群）
+集群维护实战（集群停机维护和单点轮流重启，增加和减少集群节点）
+集群压测实战（高并发下网站出现的各种问题的解决思路）
